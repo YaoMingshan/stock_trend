@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A股趋势分析 - 涨跌排行榜</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header>
+            <h1>📈 A股趋势分析</h1>
+            <p class="subtitle">每日涨跌排行榜</p>
+            <p class="update-time">
+                <span class="update-label">更新时间:</span>
+                <span id="updateTime">加载中...</span>
+            </p>
+        </header>
+
+        <!-- 市场概况 -->
+        <section class="market-overview card">
+            <h2>📊 市场概况</h2>
+            <div class="overview-grid" id="marketOverview">
+                <div class="loading">数据加载中...</div>
+            </div>
+        </section>
+
+        <!-- 周期选择标签 -->
+        <section class="period-tabs">
+            <div class="tabs">
+                <button class="tab-btn active" data-period="5d">
+                    <span class="tab-icon">📅</span>
+                    <span class="tab-text">5日排行</span>
+                </button>
+                <button class="tab-btn" data-period="10d">
+                    <span class="tab-icon">📆</span>
+                    <span class="tab-text">10日排行</span>
+                </button>
+                <button class="tab-btn" data-period="20d">
+                    <span class="tab-icon">🗓️</span>
+                    <span class="tab-text">20日排行</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 排行榜 -->
+        <section class="rankings">
+            <div class="ranking-container">
+                <!-- 涨幅排行 -->
+                <div class="ranking-card gainers card">
+                    <div class="card-header">
+                        <h3>🚀 涨幅TOP50</h3>
+                        <span class="period-badge" id="gainersPeriod">5日</span>
+                    </div>
+                    <div class="ranking-list" id="gainersList">
+                        <div class="loading">数据加载中...</div>
+                    </div>
+                </div>
+                
+                <!-- 跌幅排行 -->
+                <div class="ranking-card losers card">
+                    <div class="card-header">
+                        <h3>📉 跌幅TOP50</h3>
+                        <span class="period-badge" id="losersPeriod">5日</span>
+                    </div>
+                    <div class="ranking-list" id="losersList">
+                        <div class="loading">数据加载中...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 统计信息 -->
+        <section class="statistics card">
+            <h2>📈 统计信息</h2>
+            <div id="statisticsContent">
+                <div class="loading">数据加载中...</div>
+            </div>
+        </section>
+
+        <!-- 历史记录 -->
+        <section class="history card">
+            <h2>📋 历史记录</h2>
+            <div class="history-list" id="historyList">
+                <p class="text-muted">最近7天的分析记录</p>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer>
+            <div class="footer-content">
+                <p>📊 数据来源: 东方财富 | ⏰ 每个交易日 15:30 自动更新</p>
+                <p class="disclaimer">⚠️ 本站数据仅供参考，不构成任何投资建议。投资有风险，入市需谨慎。</p>
+                <p class="copyright">
+                    Powered by <a href="https://github.com" target="_blank">GitHub Actions</a> & 
+                    <a href="https://pages.github.com" target="_blank">GitHub Pages</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" title="返回顶部">↑</button>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

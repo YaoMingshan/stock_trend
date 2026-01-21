@@ -1,0 +1,89 @@
+name: 每日股票分析更新
+
+on:
+  # 定时任务 - 每个交易日下午3:30（UTC时间7:30）
+  schedule:
+    - cron: '30 7 * * 1-5'  # 周一到周五 UTC 7:30 = 北京时间 15:30
+  
+  # 支持手动触发
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: '运行模式'
+        required: false
+        default: 'quick'
+        type: choice
+        options:
+          - quick
+          - full
+
+# 设置权限
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  update-analysis:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: 设置Python环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: 运行分析
+        run: |
+          python main.py --mode ${{ github.event.inputs.mode || 'quick' }} --force
+        env:
+          TZ: Asia/Shanghai
+      
+      - name: 提交更新
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add -A
+          git diff --staged --quiet || git commit -m "📊 自动更新: $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M')"
+          git push
+
+  # 部署到GitHub Pages
+  deploy-pages:
+    needs: update-analysis
+    runs-on: ubuntu-latest
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          ref: main  # 确保获取最新提交
+      
+      - name: 拉取最新更改
+        run: git pull origin main
+      
+      - name: 配置Pages
+        uses: actions/configure-pages@v4
+      
+      - name: 上传artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs'
+      
+      - name: 部署到GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
